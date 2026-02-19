@@ -1,7 +1,3 @@
-# ================================
-# 🏠 House Price Prediction Web App
-# ================================
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -16,9 +12,7 @@ st.title("🏠 House Price Prediction App")
 # Random seed
 np.random.seed(42)
 
-# ================================
-# 1️⃣ Dummy Dataset Create karna
-# ================================
+#database create karna
 
 data_size = 500
 
@@ -38,11 +32,7 @@ data['Price'] = (
     data['Age'] * 2000 +
     np.random.randint(-20000, 20000, data_size)
 )
-
-# ================================
-# 2️⃣ Preprocessing
-# ================================
-
+# Preprocessing
 le = LabelEncoder()
 data['Location'] = le.fit_transform(data['Location'])
 
@@ -53,16 +43,15 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# ================================
-# 3️⃣ Model Training
-# ================================
+#  Model Training
+
 
 model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
-# ================================
-# 4️⃣ Sidebar User Input
-# ================================
+
+# Sidebar User Input
+
 
 st.sidebar.header("Enter House Details")
 
@@ -77,17 +66,17 @@ location_encoded = le.transform([location])[0]
 user_input = pd.DataFrame([[sqft, bedrooms, bathrooms, age, location_encoded]],
                           columns=X.columns)
 
-# ================================
-# 5️⃣ Prediction Button
-# ================================
+
+# Prediction Button
+
 
 if st.button("Predict Price"):
     prediction = model.predict(user_input)
     st.success(f"🏷️ Predicted House Price: ₹ {round(prediction[0], 2)}")
 
-# ================================
-# 6️⃣ Model Evaluation Display
-# ================================
+
+# Model Evaluation Display
+
 
 st.subheader("📊 Model Evaluation")
 
@@ -100,3 +89,5 @@ r2 = r2_score(y_test, y_pred)
 st.write(f"**MAE:** {round(mae,2)}")
 st.write(f"**MSE:** {round(mse,2)}")
 st.write(f"**R² Score:** {round(r2,2)}")
+st.write("Model evaluation metrics show how well the model is performing on the test data.")    
+st.write("Lower MAE and MSE values indicate better performance, while a higher R² score (closer to 1) indicates a better fit.") 
